@@ -134,10 +134,7 @@ resource "kubernetes_manifest" "virtual_machine" {
         }
       }
       "className" = "best-effort-small"
-      "image" = {
-        "kind" = "ClusterVirtualMachineImage"
-        "name" = resource.vcfa_content_library_item.ova.name
-      }
+      "imageName" = resource.vcfa_content_library_item.ova.image_identifier
       "network" = {
         "interfaces" = [
           {
@@ -152,7 +149,7 @@ resource "kubernetes_manifest" "virtual_machine" {
       "powerOffMode" = "TrySoft"
       "powerState"   = "PoweredOn"
       "restartMode"  = "TrySoft"
-      "storageClass" = data.vcfa_storage_class.sc.name
+      "storageClass" = replace(lower(data.vcfa_storage_class.sc.name)," ","-")
       "suspendMode"  = "TrySoft"
     }
   }

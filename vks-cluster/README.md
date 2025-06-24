@@ -14,10 +14,11 @@ vcfa_url = "https://your-vcf-url.com"
 
 2. update the local vars in `main.tf` to match your environment
 
-3. run terraform
+3. run terraform, we need to do two applies due to the way the k8s provider works. we need the namespace to exist first to be able to initiate the provider. 
 
 ```bash
 terraform init
+terraform apply -target=module.supervisor_namespace
 terraform plan
 terraform apply
 ```

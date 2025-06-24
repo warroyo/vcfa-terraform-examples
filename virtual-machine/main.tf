@@ -49,28 +49,12 @@ resource "vcfa_content_library_item" "ova" {
   depends_on = [ null_resource.ova_download ]
 }
 
-resource "vcfa_supervisor_namespace" "supervisor_namespace" {
-  name_prefix  = "lab"
-  project_name = "default-project"
-  class_name   = "small"
-  description  = "Supervisor Namespace with prefix [lab] created by Terraform"
-  region_name  = local.region_name
-  vpc_name     = local.vpc_name
-
-  storage_classes_initial_class_config_overrides {
-    limit = "1000000Mi"
-    name  = "vSAN Default Storage Policy"
-  }
-
-  zones_initial_class_config_overrides {
-    cpu_limit          = "10000M"
-    cpu_reservation    = "0M"
-    memory_limit       = "10000Mi"
-    memory_reservation = "0Mi"
-    name               = local.zone_name
-  }
+module "supervisor_namespace" {
+  source = "../modules/namespace"
+  zone_name = local.zone_name
+  region_name = local.region_name
+  vpc_name = local.vpc_name
 }
-
 
 resource "kubernetes_manifest" "virtual_machine_lb" {
   manifest = {
@@ -78,7 +62,7 @@ resource "kubernetes_manifest" "virtual_machine_lb" {
     "kind"       = "VirtualMachineService",
     "metadata" = {
       "name"      = local.vm_name
-      "namespace" = resource.vcfa_supervisor_namespace.supervisor_namespace.name
+      "namespace" = module.supervisor_namespace.namespace
     },
     "spec" = {
       "ports" = [
@@ -102,7 +86,7 @@ resource "kubernetes_manifest" "virtual_machine_lb" {
 resource "kubernetes_secret" "virtual_machine_secret" {
   metadata {
     name      = local.vm_name
-    namespace = resource.vcfa_supervisor_namespace.supervisor_namespace.name
+    namespace = module.supervisor_namespace.namespace
     labels = {
       vm-selector = local.vm_name
     }
@@ -123,7 +107,7 @@ resource "kubernetes_manifest" "virtual_machine" {
     "kind"       = "VirtualMachine"
     "metadata" = {
       "name"      = local.vm_name
-      "namespace" = resource.vcfa_supervisor_namespace.supervisor_namespace.name
+      "namespace" = module.supervisor_namespace.namespace
       "labels" = {
         "vm-selector"            = local.vm_name,
         (local.vm_name) = "vm-lb-selector"

@@ -22,7 +22,7 @@ resource "kubernetes_manifest" "kubernetes_cluster" {
     "kind"       = "Cluster"
     "metadata" = {
       "name"      = local.cluster_name
-      "namespace" = resource.vcfa_supervisor_namespace.supervisor_namespace.name
+      "namespace" =  module.supervisor_namespace.namespace
       "labels" = {
         "kubernetes-cluster-selector" = local.cluster_name
       }

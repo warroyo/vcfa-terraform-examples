@@ -19,6 +19,12 @@ resource "kubernetes_manifest" "argo-cd-instance" {
       "version" = "2.14.13+vmware.1-vks.1"
     }
   }
+  wait {
+    condition {
+      status = "True"
+      type = "PackageInstallReady"
+    }
+  }
 }
 
 resource "kubernetes_service_account" "argo-cd-sa" {

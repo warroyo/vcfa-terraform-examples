@@ -1,6 +1,6 @@
 terraform {
   required_providers {
-    vcfa = {
+    kubernetes = {
       source = "hashicorp/kubernetes"
     }
 

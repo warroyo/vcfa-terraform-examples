@@ -89,4 +89,5 @@ data "kubernetes_service" "argocd" {
     name = "argocd-server"
     namespace = var.namespace
   }
+  depends_on = [ kubernetes_manifest.argo-cd-instance ]
 }

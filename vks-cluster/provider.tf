@@ -21,7 +21,8 @@ provider "vcfa" {
 
 data "vcfa_kubeconfig" "kubeconfig" {
   project_name              = "default-project"
-  supervisor_namespace_name = resource.vcfa_supervisor_namespace.supervisor_namespace.name
+  supervisor_namespace_name = module.supervisor_namespace.namespace
+  depends_on = [ module.supervisor_namespace ]
 }
 
 provider "kubernetes" {

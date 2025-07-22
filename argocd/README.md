@@ -13,6 +13,7 @@ This example creates a supervisor namespace with an instance of [ArgoCD](https:/
 ```
 vcfa_refresh_token = "your-token"
 vcfa_url = "https://your-vcf-url.com"
+vcfa_org = "your-org"
 ```
 
 2. update the local vars in `main.tf` to match your environment

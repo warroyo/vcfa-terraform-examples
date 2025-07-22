@@ -8,3 +8,8 @@ variable "vcfa_url" {
   type        = string
   description = "The VCF Automation url"
 }
+
+variable "vcfa_org" {
+  type        = string
+  description = "The VCF Automation org"
+}

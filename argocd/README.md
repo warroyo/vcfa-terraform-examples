@@ -14,9 +14,11 @@ This example creates a supervisor namespace with an instance of [ArgoCD](https:/
 vcfa_refresh_token = "your-token"
 vcfa_url = "https://your-vcf-url.com"
 vcfa_org = "your-org"
+zone_name = "zone name"
+region_name = "region name"
+vpc_name = "vpc name"
 ```
 
-2. update the local vars in `main.tf` to match your environment
 
 3. run terraform, we need to do two applies due to the way the k8s provider works. we need the namespace to exist first to be able to initiate the provider. 
 

@@ -91,7 +91,7 @@ resource "kubernetes_secret" "argocd-namespace-register" {
   }
   data = {
       "name" = module.supervisor_namespace.namespace
-      "config" = jsondecode(local.argocd_cluster_config)
+      "config" = jsonencode(local.argocd_cluster_config)
       "namespaces" = module.supervisor_namespace.namespace
       "server" = "kubernetes.default.svc"
   }

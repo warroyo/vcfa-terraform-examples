@@ -90,10 +90,10 @@ resource "kubernetes_secret" "argocd-namespace-register" {
   type = "Opaque"
 }
 
-data "kubernetes_service" "argocd" {
-    metadata {
-    name = "argocd-server"
-    namespace = var.namespace
-  }
-  depends_on = [ kubernetes_manifest.argo-cd-instance ]
-}
+# data "kubernetes_service" "argocd" {
+#     metadata {
+#     name = "argocd-server"
+#     namespace = var.namespace
+#   }
+#   depends_on = [ kubernetes_manifest.argo-cd-instance ]
+# }

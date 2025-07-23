@@ -85,7 +85,7 @@ resource "kubernetes_secret" "argocd-namespace-register" {
       "name" = var.namespace
       "config" = jsonencode(local.argocd_cluster_config)
       "namespaces" = var.namespace
-      "server" = "kubernetes.default.svc"
+      "server" = "https://kubernetes.default.svc"
   }
   type = "Opaque"
 }

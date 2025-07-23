@@ -1,7 +1,6 @@
 # Namespace with ArgoCD integration
 
-This example creates a supervisor namespace with an instance of [ArgoCD](https://blogs.vmware.com/cloud-foundation/2025/07/11/gitops-for-vcf-broadcom-argo-cd-operator-now-available/) deployed into it. This will also register the namespace back to ArgoCD, this allows for managining resources in the namespace using ArgoCD.  Finally it will deploy a basic ArgoCD app that creates a VKS cluster. 
-
+This example creates a supervisor namespace with an instance of [ArgoCD](https://blogs.vmware.com/cloud-foundation/2025/07/11/gitops-for-vcf-broadcom-argo-cd-operator-now-available/) deployed into it. This will also register the namespace back to ArgoCD, this allows for managining resources in the namespace using ArgoCD. 
 ### Pre-requisites 
 
 * the [ArgoCD supervisor service](https://techdocs.broadcom.com/us/en/vmware-cis/vcf/vsphere-supervisor-services-and-standalone-components/latest/using-supervisor-services/using-argo-cd-service.html) deployed

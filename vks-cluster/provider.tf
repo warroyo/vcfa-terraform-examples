@@ -14,7 +14,7 @@ terraform {
 provider "vcfa" {
   url                  = var.vcfa_url
   allow_unverified_ssl = true
-  org                  = "acme"
+  org                  = var.vcfa_org
   auth_type            = "api_token"
   api_token            = var.vcfa_refresh_token
 }

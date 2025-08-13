@@ -1,9 +1,9 @@
 
 locals {
   cluster_name = "lab-1"
-  region_name = "west"
-  vpc_name = "west-Default-VPC"
-  zone_name = "z-wld-a"
+  region_name = var.region_name
+  vpc_name = var.vpc_name
+  zone_name = var.zone_name
 }
 
 module "supervisor_namespace" {

@@ -1,19 +1,19 @@
 
 locals {
   vm_name = "sample-vm"
-  region_name = "west"
-  vpc_name = "west-Default-VPC"
-  zone_name = "z-wld-a"
+  region_name = var.region_name
+  vpc_name = var.vpc_name
+  zone_name = var.zone_name
   network_name = "vm-default"
 }
 
 
 data "vcfa_org" "acme" {
-  name = "acme"
+  name = var.vcfa_org
 }
 
 data "vcfa_region" "region" {
-  name = "west"
+  name = local.region_name
 }
 
 data "vcfa_storage_class" "sc" {

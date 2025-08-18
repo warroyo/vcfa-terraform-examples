@@ -1,5 +1,5 @@
 locals {
-  kubeconfig = yamldecode(base64decode(sensitive(var.kubeconfig)))
+  kubeconfig = yamldecode(sensitive(var.kubeconfig))
   argocd_cluster_config = {
     "tlsClientConfig" = {
       "caData" = local.kubeconfig["clusters"][0]["cluster"]["certificate-authority-data"],

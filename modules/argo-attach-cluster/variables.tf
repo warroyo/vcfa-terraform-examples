@@ -9,5 +9,5 @@ variable "namespace" {
 variable "kubeconfig" {
   type = string
   default = ""
-  description = "base64 encoded kubeconfig"
+  description = "yaml kubeconfig"
 }

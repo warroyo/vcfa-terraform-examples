@@ -1,0 +1,64 @@
+
+module "supervisor_namespace" {
+  source = "../modules/namespace"
+  zone_name = var.zone_name
+  region_name = var.region_name
+  vpc_name = var.vpc_name
+  name = var.namespace
+}
+
+module "argocd-instance" {
+  source = "../modules/argocd-instance"
+  name = "argocd-1"
+  namespace = module.supervisor_namespace.namespace
+}
+
+module "vks" {
+  source = "../modules/vks-cluster"
+  name = var.cluster
+  namespace = module.supervisor_namespace.namespace
+  vmClass = "best-effort-large"
+}
+
+module "argo-attach" {
+  source = "../modules/argo-attach-cluster"
+  cluster_name = var.cluster
+  kubeconfig = module.vks.kubeconfig
+  namespace = module.supervisor_namespace.namespace
+}
+
+locals {
+  kubeconfig = yamldecode(sensitive(module.vks.kubeconfig))
+}
+
+resource "argocd_application" "music-store" {
+  metadata {
+    name = "music-store"
+    namespace = module.supervisor_namespace.namespace
+  }
+
+  spec {
+    project = "default"
+    destination {
+      server = local.kubeconfig["clusters"][0]["cluster"]["server"]
+      namespace = "default"
+    }
+
+    source {
+      repo_url = "https://github.com/NiranEC77/example-music-store-1"
+      path = "./"
+      target_revision = "main"
+      directory {
+        include = "k8s-*.yaml"
+      }
+    }
+    sync_policy {
+      automated {
+        prune = true
+        self_heal = true
+      }
+    }
+
+  }
+
+}

@@ -9,3 +9,8 @@ variable "vpc_name" {
 variable "zone_name" {
   type        = string
 }
+
+variable "name" {
+  type = string
+  default = "lab"
+}

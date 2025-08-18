@@ -86,14 +86,14 @@ data "kubernetes_secret" "cluster-kubeconfig" {
     namespace = var.namespace
   }
 
-  binary_data = {
-    value = ""
-  }
+  # binary_data = {
+  #   value = "LS0tCg=="
+  # }
   depends_on = [ kubernetes_manifest.kubernetes_cluster ]
 }
 
 output "kubeconfig" {
-  value = lookup(data.kubernetes_secret.cluster-kubeconfig.binary_data, "value")
+  value = lookup(data.kubernetes_secret.cluster-kubeconfig.data, "value")
   depends_on = [ kubernetes_manifest.kubernetes_cluster ]
   sensitive = true
 }

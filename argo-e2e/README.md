@@ -1,13 +1,19 @@
-# Cluster registered with ArgoCD
+# End to End example 
 
-This example creates cluster in  a supervisor namespace that already has  [ArgoCD](https://blogs.vmware.com/cloud-foundation/2025/07/11/gitops-for-vcf-broadcom-argo-cd-operator-now-available/) deployed into it. This will also register the cluster with ArgoCD so that apps can be deployed into it.
+This example creates an environment from scratch that uses ArgoCD to deploy an app. This will create the following:
+
+* Supervisor Namespace
+* ArgoCD instance
+* VKS Cluster
+* Register the namespace to ArgoCD
+* Register the cluster to ArgoCD
+* Deploy an ecommerce app
 
 
 ### Pre-requisites 
 
 * The [ArgoCD supervisor service](https://techdocs.broadcom.com/us/en/vmware-cis/vcf/vsphere-supervisor-services-and-standalone-components/latest/using-supervisor-services/using-argo-cd-service.html) deployed
 
-* An instance of ArgoCD has been deployed in a namespace, see the [argocd example](../argocd/)
 
 ## Usage
 
@@ -17,7 +23,11 @@ This example creates cluster in  a supervisor namespace that already has  [ArgoC
 vcfa_refresh_token = "your-token"
 vcfa_url = "https://your-vcf-url.com"
 vcfa_org = "your-org"
-namespace = "existing namespace with argocd"
+zone_name = "zone name"
+region_name = "region name"
+vpc_name = "vpc name"
+namespace = "namespace name"
+cluster = "cluster name
 ```
 
 
@@ -25,6 +35,7 @@ namespace = "existing namespace with argocd"
 
 ```bash
 terraform init
+terraform apply -target=module.supervisor_namespace
 terraform plan
 terraform apply
 ```

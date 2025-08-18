@@ -20,9 +20,9 @@ resource "kubernetes_manifest" "argo-cd-instance" {
     }
   }
   wait {
-    condition {
-      status = "True"
-      type = "PackageInstallReady"
+    fields = {
+      //need to check the reason since the status is always true
+      "status.conditions[2].reason" = "ReconcileSucceeded"
     }
   }
 }
@@ -90,10 +90,19 @@ resource "kubernetes_secret" "argocd-namespace-register" {
   type = "Opaque"
 }
 
-# data "kubernetes_service" "argocd" {
-#     metadata {
-#     name = "argocd-server"
-#     namespace = var.namespace
-#   }
-#   depends_on = [ kubernetes_manifest.argo-cd-instance ]
-# }
+data "kubernetes_service" "argocd" {
+  metadata {
+    name = "argocd-server"
+    namespace = var.namespace
+  }
+  depends_on = [ kubernetes_manifest.argo-cd-instance ]
+}
+
+data "kubernetes_secret" "admin-password" {
+  metadata {
+    name = "argocd-initial-admin-secret"
+    namespace = var.namespace
+  }
+
+  depends_on =  [ kubernetes_manifest.argo-cd-instance ]
+}

@@ -1,5 +1,5 @@
 resource "vcfa_supervisor_namespace" "supervisor_namespace" {
-  name_prefix  = "lab"
+  name_prefix  = var.name
   project_name = "default-project"
   class_name   = "small"
   description  = "Supervisor Namespace with prefix [lab] created by Terraform"
@@ -7,7 +7,7 @@ resource "vcfa_supervisor_namespace" "supervisor_namespace" {
   vpc_name     = var.vpc_name
 
   storage_classes_initial_class_config_overrides {
-    limit = "1000000Mi"
+    limit = "102400Mi"
     name  = "vSAN Default Storage Policy"
   }
 

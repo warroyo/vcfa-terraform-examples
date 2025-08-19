@@ -1,12 +1,20 @@
 locals {
   kubeconfig = yamldecode(sensitive(var.kubeconfig))
-  argocd_cluster_config = {
+ 
+  argocd_cluster_config = var.token_auth ? {
+    "bearerToken" = local.kubeconfig["users"][0]["user"]["token"]
+    "tlsClientConfig" = {
+      "insecure" = true
+    }
+  } : {
+    "bearerToken" = ""
     "tlsClientConfig" = {
       "caData" = local.kubeconfig["clusters"][0]["cluster"]["certificate-authority-data"],
       "certData" = local.kubeconfig["users"][0]["user"]["client-certificate-data"]
       "keyData" = local.kubeconfig["users"][0]["user"]["client-key-data"]
     }
   }
+
 }
 
 

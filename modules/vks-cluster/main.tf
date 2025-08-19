@@ -28,6 +28,15 @@ resource "kubernetes_manifest" "kubernetes_cluster" {
         },
         "variables" = [
           {
+            "name" = "vsphereOptions"
+            "value" = {
+              "persistentVolumes" = {
+                "availableStorageClasses" = [var.storageClass],
+                "defaultStorageClass" = var.storageClass
+              }
+            }
+          },
+          {
             "name" = "kubernetes",
             "value" = {
               "security" = {
@@ -86,9 +95,6 @@ data "kubernetes_secret" "cluster-kubeconfig" {
     namespace = var.namespace
   }
 
-  # binary_data = {
-  #   value = "LS0tCg=="
-  # }
   depends_on = [ kubernetes_manifest.kubernetes_cluster ]
 }
 

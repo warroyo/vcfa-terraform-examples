@@ -11,3 +11,8 @@ variable "kubeconfig" {
   default = ""
   description = "yaml kubeconfig"
 }
+
+variable "token_auth" {
+  type = bool
+  default = false
+}

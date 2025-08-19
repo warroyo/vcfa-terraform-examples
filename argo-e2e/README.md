@@ -35,7 +35,7 @@ cluster = "cluster name
 
 ```bash
 terraform init
-terraform apply -target=module.supervisor_namespace
+terraform apply -target=module.supervisor_namespace # only need to do this the first time
 terraform plan
 terraform apply
 ```

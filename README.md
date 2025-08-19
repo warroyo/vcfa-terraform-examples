@@ -11,7 +11,7 @@ This repo contians a collection of examples how to to interact with VCF-A using 
 * [Virtual machine](./virtual-machine) - simple example of creating a virtual machine and it's required resources.
 * [ArgoCD Instance](./argocd/) -  creates a namespace with an instance of ArgoCD in it.
 * [ArgoCD e2e](./argo-e2e/) -  end to end of creating a namespace, cluster, argocd instance, and deploying an app
-* [ArgoCD cluster] - deloys a cluster and registers it with ArgoCD
+* [ArgoCD cluster](./argocd-cluster/) - deloys a cluster and registers it with ArgoCD
 
 
 ## FAQ

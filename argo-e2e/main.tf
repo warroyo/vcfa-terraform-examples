@@ -25,40 +25,43 @@ module "argo-attach" {
   cluster_name = var.cluster
   kubeconfig = module.vks.kubeconfig
   namespace = module.supervisor_namespace.namespace
+  labels = {
+    "type" = "vks"
+  }
 }
 
 locals {
   kubeconfig = yamldecode(sensitive(module.vks.kubeconfig))
 }
 
-resource "argocd_application" "music-store" {
-  metadata {
-    name = "music-store"
-    namespace = module.supervisor_namespace.namespace
-  }
-
-  spec {
-    project = "default"
-    destination {
-      server = local.kubeconfig["clusters"][0]["cluster"]["server"]
-      namespace = "default"
+resource "kubernetes_manifest" "music-store" {
+  manifest = {
+    apiVersion = "argoproj.io/v1alpha1"
+    kind       = "Application"
+    metadata = {
+      name = "music-store"
+      namespace = module.supervisor_namespace.namespace
     }
-
-    source {
-      repo_url = "https://github.com/NiranEC77/example-music-store-1"
-      path = "./"
-      target_revision = "main"
-      directory {
-        include = "k8s-*.yaml"
+    spec = {
+      project = "default"
+      source = {
+        repoURL = "https://github.com/NiranEC77/example-music-store-1"
+        path = "./"
+        targetRevision = "main"
+        directory = {
+          include = "k8s-*.yaml"
+        }
+      }
+      destination = {
+        server = local.kubeconfig["clusters"][0]["cluster"]["server"]
+        namespace = "default"
+      }
+      syncPolicy = {
+        automated = {
+          prune    = true
+          selfHeal = true
+        }
       }
     }
-    sync_policy {
-      automated {
-        prune = true
-        self_heal = true
-      }
-    }
-
   }
-
 }

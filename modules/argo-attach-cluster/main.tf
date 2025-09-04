@@ -1,20 +1,15 @@
 locals {
   kubeconfig = yamldecode(sensitive(var.kubeconfig))
  
-  argocd_cluster_config = var.token_auth ? {
-    "bearerToken" = local.kubeconfig["users"][0]["user"]["token"]
-    "tlsClientConfig" = {
-      "insecure" = true
-    }
-  } : {
-    "bearerToken" = ""
-    "tlsClientConfig" = {
-      "caData" = local.kubeconfig["clusters"][0]["cluster"]["certificate-authority-data"],
-      "certData" = local.kubeconfig["users"][0]["user"]["client-certificate-data"]
-      "keyData" = local.kubeconfig["users"][0]["user"]["client-key-data"]
+  cluster_config =  {
+    bearerToken = var.token_auth ? local.kubeconfig["users"][0]["user"]["token"] : ""
+    tlsClientConfig = {
+      insecure = var.token_auth ? true : false
+      caData = !var.token_auth ? local.kubeconfig["clusters"][0]["cluster"]["certificate-authority-data"] : ""
+      certData = !var.token_auth ? local.kubeconfig["users"][0]["user"]["client-certificate-data"] : ""
+      keyData = !var.token_auth ? local.kubeconfig["users"][0]["user"]["client-key-data"] : ""
     }
   }
-
 }
 
 
@@ -24,14 +19,12 @@ resource "kubernetes_secret" "argocd-cluster-register" {
   metadata {
     name = "${var.cluster_name}-cluster-secret"
     namespace = var.namespace
-    labels = {
-      "argocd.argoproj.io/secret-type" = "cluster"
-    }
+    labels = merge(var.labels,{"argocd.argoproj.io/secret-type" = "cluster"})
     
   }
   data = {
       "name" = var.cluster_name
-      "config" = jsonencode(local.argocd_cluster_config)
+      "config" = jsonencode(local.cluster_config)
       "clusterResources" = "true"
       "server" = local.kubeconfig["clusters"][0]["cluster"]["server"]
   }

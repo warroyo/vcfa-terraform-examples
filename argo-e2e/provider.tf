@@ -7,11 +7,6 @@ terraform {
     vcfa = {
       source = "vmware/vcfa"
     }
-    argocd = {
-      source = "argoproj-labs/argocd"
-      version = "7.10.1"
-    }
-
   }
 }
 
@@ -32,11 +27,4 @@ provider "kubernetes" {
   host     = data.vcfa_kubeconfig.kubeconfig.host
   insecure = data.vcfa_kubeconfig.kubeconfig.insecure_skip_tls_verify
   token    = data.vcfa_kubeconfig.kubeconfig.token
-}
-
-provider "argocd" {
-  server_addr = module.argocd-instance.server_ip
-  username    = "admin"
-  password    = module.argocd-instance.admin_password
-  insecure = true
 }

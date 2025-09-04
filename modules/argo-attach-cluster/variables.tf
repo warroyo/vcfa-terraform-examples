@@ -16,3 +16,9 @@ variable "token_auth" {
   type = bool
   default = false
 }
+
+variable "labels" {
+  default = {
+  }
+  type = map(string)
+}

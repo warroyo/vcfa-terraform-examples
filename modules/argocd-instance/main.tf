@@ -16,6 +16,9 @@ resource "kubernetes_manifest" "argo-cd-instance" {
       "namespace" = var.namespace
     }
     "spec" = {
+      "applicationSet" = {
+        "enabled": true
+      }
       "version" = "2.14.13+vmware.1-vks.1"
     }
   }

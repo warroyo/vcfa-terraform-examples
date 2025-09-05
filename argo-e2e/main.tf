@@ -13,6 +13,13 @@ module "argocd-instance" {
   namespace = module.supervisor_namespace.namespace
 }
 
+module "bootstrap-ns" {
+  source = "../modules/sup-ns-cluster-bootstrap"
+  namespace = module.supervisor_namespace.namespace
+  path = "./cluster-bootstrap/source"
+  repo = "https://github.com/warroyo/vks-argocd-examples"
+}
+
 module "vks" {
   source = "../modules/vks-cluster"
   name = var.cluster

@@ -1,24 +1,6 @@
 # This file is maintained automatically by "terraform init".
 # Manual edits may be lost in future updates.
 
-provider "registry.terraform.io/argoproj-labs/argocd" {
-  version     = "7.10.1"
-  constraints = "7.10.1"
-  hashes = [
-    "h1:8C2ZNdTyld7NIOpwFW4QpXEYWk25K4/NFmJ9gcNsmpY=",
-    "zh:00c40b0708dcbcadaed774cb44aab82937b028fdcf5df04bb0d9af829d024376",
-    "zh:14bf83922ce004a5c04ebe599aa522003682c961fb9fc97cccbeaf4f1a6bfae5",
-    "zh:1a66c1603d15879c17492bb0a1e6ccfa4f91f9ee27a0db70fad1921000e9b67f",
-    "zh:4fff1a650baf0695d2128dced54236c8b4c1d1d5b3f32ffa38ff32680b3547cb",
-    "zh:57b551a56613e0620c1f5ce476e8712fb0f78fbb43cd637840b9ebbe42f9d46f",
-    "zh:5e6a3b6d301fc9f179148b6c412881f406e3f988bb116fc7abf8cb845ef1b2ed",
-    "zh:6db6331fb94571b51e3c9e4422ff77ce76695a1569ba45118fb275de779f0e88",
-    "zh:8420ce8fdd3b2e3bdccbf5f407ef84792f1c336b7d10dd5579430b6296ef9e43",
-    "zh:b24bdbeb25a8e100fa3550a29fe081d5ccbde44cfffce6e955dc80f1f13eb8dc",
-    "zh:f85dfce242ba4f9d486d96f01da62f5d4a187646b97ce5b3ce3e5c6593ee6e64",
-  ]
-}
-
 provider "registry.terraform.io/hashicorp/kubernetes" {
   version = "2.38.0"
   hashes = [

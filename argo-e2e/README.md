@@ -4,6 +4,7 @@ This example creates an environment from scratch that uses ArgoCD to deploy an a
 
 * Supervisor Namespace
 * ArgoCD instance
+* Bootstrap Application Set for the namespace
 * VKS Cluster
 * Register the namespace to ArgoCD
 * Register the cluster to ArgoCD

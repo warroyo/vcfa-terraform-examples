@@ -80,10 +80,12 @@ resource "kubernetes_manifest" "kubernetes_cluster" {
       }
     }
   }
+  timeouts {
+    create = "20m"
+  }
   wait {
-    condition {
-      type = "Ready"
-      status = "True"
+    fields = {
+    "status.v1beta2.conditions[0].status" = "True"
     }
   }
 }

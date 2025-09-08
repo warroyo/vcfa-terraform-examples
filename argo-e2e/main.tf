@@ -18,6 +18,7 @@ module "bootstrap-ns" {
   namespace = module.supervisor_namespace.namespace
   path = "./cluster-bootstrap/source"
   repo = "https://github.com/warroyo/vks-argocd-examples"
+  depends_on = [ module.argocd-instance ]
 }
 
 module "vks" {
@@ -42,6 +43,7 @@ locals {
 }
 
 resource "kubernetes_manifest" "music-store" {
+  depends_on = [ module.argocd-instance ]
   manifest = {
     apiVersion = "argoproj.io/v1alpha1"
     kind       = "Application"

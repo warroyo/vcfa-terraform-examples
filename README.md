@@ -12,6 +12,7 @@ This repo contians a collection of examples how to to interact with VCF-A using 
 * [ArgoCD Instance](./argocd/) -  creates a namespace with an instance of ArgoCD in it.
 * [ArgoCD e2e](./argo-e2e/) -  end to end of creating a namespace, cluster, argocd instance, and deploying an app
 * [ArgoCD cluster](./argocd-cluster/) - deloys a cluster and registers it with ArgoCD
+* [Secret Store Integration](./secret-store-vks/) - deloys a cluster, registers it to argocd, creates a secret, registers the cluster with secrets store service and installs the vault injetcor in the cluster
 
 
 ## FAQ

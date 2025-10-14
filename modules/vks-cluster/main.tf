@@ -22,7 +22,7 @@ resource "kubernetes_manifest" "kubernetes_cluster" {
         "serviceDomain" = "cluster.local"
       },
       "topology" = {
-        "class" = "builtin-generic-v3.3.0",
+        "class" =  var.cluster_class,
         "controlPlane" = {
           "replicas" = 1
         },
@@ -59,7 +59,7 @@ resource "kubernetes_manifest" "kubernetes_cluster" {
             "value" = var.storageClass
           }
         ],
-        "version" = "v1.32.0+vmware.6-fips"
+        "version" = var.k8s_version
         "workers" = {
           "machineDeployments" = [
             {

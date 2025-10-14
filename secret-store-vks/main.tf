@@ -43,7 +43,7 @@ module "argo-attach" {
 }
 
 locals {
-  injetcor_manifest = <<-EOT
+  injector_manifest = <<-EOT
     apiVersion: argoproj.io/v1alpha1
     kind: Application
     metadata:
@@ -84,8 +84,49 @@ locals {
         syncOptions:
         - CreateNamespace=true
   EOT
+   app_manifest = <<-EOT
+    apiVersion: argoproj.io/v1alpha1
+    kind: Application
+    metadata:
+      name: ${var.cluster}-sample-secret-app
+      namespace: ${var.namespace}
+    spec:
+      project: "default"
+      source:
+        path: ./secret-store-app/source
+        repoURL: https://github.com/warroyo/vks-argocd-examples
+        targetRevision: main
+        kustomize:
+          patches:
+          - target:
+              kind: Deployment
+              name: nginx-deployment
+            patch: |-
+              apiVersion: apps/v1
+              kind: Deployment
+              metadata:
+                name: nginx-deployment
+                namespace: default
+              spec:
+                template:
+                  metadata:
+                    annotations:
+                      vault.hashicorp.com/auth-path: auth/${var.cluster}
+      destination:
+        name: ${var.cluster}
+        namespace: default
+      syncPolicy:
+        automated:
+          prune: true
+          selfHeal: true
+  EOT
 }
 
 resource "kubernetes_manifest" "argo-app-secret-injector" {
-  manifest = yamldecode(local.injetcor_manifest)
+  manifest = yamldecode(local.injector_manifest)
+}
+
+resource "kubernetes_manifest" "sample-app" {
+  manifest = yamldecode(local.app_manifest)
+  depends_on = [ kubernetes_manifest.argo-app-secret-injector ]
 }

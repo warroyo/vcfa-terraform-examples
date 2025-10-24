@@ -81,7 +81,7 @@ resource "kubernetes_manifest" "kubernetes_cluster" {
     }
   }
   timeouts {
-    create = "20m"
+    create = "30m"
   }
   wait {
     fields = {

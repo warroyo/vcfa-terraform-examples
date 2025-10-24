@@ -7,7 +7,7 @@ resource "vcfa_supervisor_namespace" "supervisor_namespace" {
   vpc_name     = var.vpc_name
 
   storage_classes_initial_class_config_overrides {
-    limit = "102400Mi"
+    limit = var.storage_limit
     name  = "vSAN Default Storage Policy"
   }
 

@@ -33,3 +33,18 @@ variable "vpc_name" {
 variable "zone_name" {
   type        = string
 }
+
+variable "ns_storage_limit" {
+  type = string
+  default = "102400Mi"
+}
+
+variable "vm_class" {
+  type = string
+  default = "best-effort-medium"
+}
+
+variable "cluster_class" {
+  type = string
+  default = "builtin-generic-v3.3.0"
+}

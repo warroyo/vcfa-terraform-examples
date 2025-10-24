@@ -5,6 +5,7 @@ module "supervisor_namespace" {
   region_name = var.region_name
   vpc_name = var.vpc_name
   name = var.namespace
+  storage_limit = var.ns_storage_limit
 }
 
 module "argocd-instance" {
@@ -25,7 +26,8 @@ module "vks" {
   source = "../modules/vks-cluster"
   name = var.cluster
   namespace = module.supervisor_namespace.namespace
-  vmClass = "best-effort-large"
+  vmClass = var.vm_class
+  cluster_class = var.cluster_class
 }
 
 module "argo-attach" {

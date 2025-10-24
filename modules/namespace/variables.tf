@@ -14,3 +14,8 @@ variable "name" {
   type = string
   default = "lab"
 }
+
+variable "storage_limit" {
+  type = string
+  default = "102400Mi"
+}

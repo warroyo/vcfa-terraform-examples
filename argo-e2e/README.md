@@ -29,6 +29,7 @@ region_name = "region name"
 vpc_name = "vpc name"
 namespace = "namespace name"
 cluster = "cluster name
+argo_password = "somepasswd" # optional if you want to set a new default password
 ```
 
 

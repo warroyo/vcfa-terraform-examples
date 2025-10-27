@@ -5,6 +5,11 @@ locals {
       "insecure" = true
     }
   }
+  argo_password = ( 
+    length(trimspace(var.password)) > 0
+    ? var.password
+    : data.kubernetes_secret.admin-password.data.password
+  )
 }
 resource "kubernetes_manifest" "argo-cd-instance" {
 
@@ -91,6 +96,20 @@ resource "kubernetes_secret" "argocd-namespace-register" {
       "server" = "https://kubernetes.default.svc.cluster.local:443"
   }
   type = "Opaque"
+}
+
+resource "kubernetes_secret_v1_data" "update-admin-secret" {
+      count = var.password != "" ? 1 : 0 
+      metadata {
+        name      = "argocd-secret" 
+        namespace = var.namespace
+      }
+
+      data = {
+        "admin.password" = bcrypt(var.password)
+        "admin.passwordMtime" = timestamp()
+      }
+      force = true
 }
 
 data "kubernetes_service" "argocd" {

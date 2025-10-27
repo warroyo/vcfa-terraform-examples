@@ -12,6 +12,7 @@ module "argocd-instance" {
   source = "../modules/argocd-instance"
   name = "argocd-1"
   namespace = module.supervisor_namespace.namespace
+  password = var.argo_password
 }
 
 module "bootstrap-ns" {

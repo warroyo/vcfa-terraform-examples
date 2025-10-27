@@ -3,6 +3,6 @@ output "server_ip" {
 }
 
 output "admin_password" {
-  value = data.kubernetes_secret.admin-password.data.password
+  value = local.argo_password
   sensitive = true
 }

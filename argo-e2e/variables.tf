@@ -48,3 +48,9 @@ variable "cluster_class" {
   type = string
   default = "builtin-generic-v3.3.0"
 }
+
+variable "argo_password" {
+  type = string
+  sensitive = true
+  default = ""
+}

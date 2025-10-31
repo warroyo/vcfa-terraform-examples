@@ -16,6 +16,8 @@ locals {
       template:
         metadata:
           name: '{{.name}}-cluster-bootstrap'
+          finalizers:
+          - resources-finalizer.argocd.argoproj.io
         spec:
           project: "default"
           source:

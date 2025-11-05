@@ -19,3 +19,8 @@ variable "storage_limit" {
   type = string
   default = "102400Mi"
 }
+
+variable "class_name" {
+  type = string
+  default = "small"
+}

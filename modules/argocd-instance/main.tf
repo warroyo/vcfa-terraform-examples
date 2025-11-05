@@ -1,10 +1,4 @@
 locals {
-  argocd_cluster_config = {
-    "bearerToken" = kubernetes_secret.argocd-token.data.token
-    "tlsClientConfig" = {
-      "insecure" = true
-    }
-  }
   argo_password = ( 
     length(trimspace(var.password)) > 0
     ? var.password
@@ -35,67 +29,10 @@ resource "kubernetes_manifest" "argo-cd-instance" {
   }
 }
 
-resource "kubernetes_service_account" "argo-cd-sa" {
-  metadata {
-    name = "argocd-manager"
-    namespace = var.namespace
-  }
-}
-
-resource "kubernetes_secret" "argocd-token" {
-  metadata {
-    name = "argocd-manager-sa-token"
-    namespace = var.namespace
-    annotations = {
-      "kubernetes.io/service-account.name" = kubernetes_service_account.argo-cd-sa.metadata[0].name
-    }
-  }
-  type = "kubernetes.io/service-account-token"
-  wait_for_service_account_token = true
-}
-
-
-resource "kubernetes_manifest" "argo-cd-role-binding" {
-
-  manifest = {
-    "apiVersion" = "rbac.authorization.k8s.io/v1"
-    "kind" = "RoleBinding"
-    "metadata" = {
-      "name" = "argocd-manager-role-binding"
-      "namespace" = var.namespace
-    }
-    "roleRef" = {
-      "apiGroup" = "rbac.authorization.k8s.io"
-      "kind" = "ClusterRole"
-      "name" = "edit" 
-    }
-    "subjects" = [
-      {
-        "kind" = "ServiceAccount"
-        "name" = kubernetes_service_account.argo-cd-sa.metadata[0].name
-        "namespace" =  var.namespace
-      }
-    ]
-  }
-}
-
-
-resource "kubernetes_secret" "argocd-namespace-register" {
-  metadata {
-    name = "${var.namespace}-cluster-secret"
-    namespace = var.namespace
-    labels = {
-      "argocd.argoproj.io/secret-type" = "cluster"
-    }
-    
-  }
-  data = {
-      "name" = var.namespace
-      "config" = jsonencode(local.argocd_cluster_config)
-      "namespaces" = var.namespace
-      "server" = "https://kubernetes.default.svc.cluster.local:443"
-  }
-  type = "Opaque"
+module "namespace-register" {
+  source = "../argocd-attach-sv-namespace"
+  namespace = var.namespace
+  argocd_namespace = var.namespace
 }
 
 resource "kubernetes_secret_v1_data" "update-admin-secret" {

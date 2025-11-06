@@ -41,7 +41,7 @@ variable "ns_storage_limit" {
 
 variable "vm_class" {
   type = string
-  default = "best-effort-medium"
+  default = "best-effort-large"
 }
 
 variable "cluster_class" {

@@ -47,6 +47,7 @@ resource "kubernetes_secret_v1_data" "update-admin-secret" {
         "admin.passwordMtime" = timestamp()
       }
       force = true
+      depends_on = [ kubernetes_manifest.argo-cd-instance ]
 }
 
 data "kubernetes_service" "argocd" {

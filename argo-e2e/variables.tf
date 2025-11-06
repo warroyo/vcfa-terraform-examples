@@ -58,3 +58,8 @@ variable "argo_password" {
   sensitive = true
   default = ""
 }
+
+variable "bootstrap_revision" {
+  type = string
+  default = "1.0.0"
+}

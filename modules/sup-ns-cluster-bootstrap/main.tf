@@ -23,7 +23,7 @@ locals {
           source:
             path: ${var.path}
             repoURL: ${var.repo}
-            targetRevision: main
+            targetRevision: ${var.revision}
             kustomize:
               namePrefix: '{{.name}}-'
               patches:

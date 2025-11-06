@@ -9,3 +9,8 @@ variable "repo" {
 variable "namespace" {
   type = string
 }
+
+variable "revision" {
+  type        = string
+  default = "main"
+}

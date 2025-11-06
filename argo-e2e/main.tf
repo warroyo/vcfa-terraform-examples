@@ -21,6 +21,7 @@ module "bootstrap-ns" {
   path = "./cluster-bootstrap/source"
   repo = "https://github.com/warroyo/vks-argocd-examples"
   depends_on = [ module.argocd-instance ]
+  revision = var.bootstrap_revision
 }
 
 module "vks" {

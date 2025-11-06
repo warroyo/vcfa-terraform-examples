@@ -29,6 +29,7 @@ module "vks" {
   namespace = module.supervisor_namespace.namespace
   vmClass = var.vm_class
   cluster_class = var.cluster_class
+  k8s_version = var.k8s_version
 }
 
 module "argo-attach" {

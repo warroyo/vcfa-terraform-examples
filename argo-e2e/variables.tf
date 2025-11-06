@@ -46,9 +46,13 @@ variable "vm_class" {
 
 variable "cluster_class" {
   type = string
-  default = "builtin-generic-v3.3.0"
+  default = "builtin-generic-v3.5.0"
 }
 
+variable "k8s_version" {
+  type = string
+  default = "v1.34.1+vmware.1"
+}
 variable "argo_password" {
   type = string
   sensitive = true

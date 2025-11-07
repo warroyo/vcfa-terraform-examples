@@ -63,3 +63,8 @@ variable "bootstrap_revision" {
   type = string
   default = "1.0.0"
 }
+
+variable "music_store_revision" {
+  type = string
+  default = "main"
+}

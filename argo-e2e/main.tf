@@ -59,22 +59,25 @@ resource "kubernetes_manifest" "music-store" {
     spec = {
       project = "default"
       source = {
-        repoURL = "https://github.com/NiranEC77/example-music-store-1"
+        repoURL = "https://github.com/NiranEC77/metal-music-store"
         path = "./"
-        targetRevision = "main"
+        targetRevision = var.music_store_revision
         directory = {
           include = "k8s-*.yaml"
         }
       }
       destination = {
         server = local.kubeconfig["clusters"][0]["cluster"]["server"]
-        namespace = "default"
+        namespace = "music-store"
       }
       syncPolicy = {
         automated = {
           prune    = true
           selfHeal = true
         }
+      syncOptions = [
+      "CreateNamespace=true"
+      ]  
       }
     }
   }

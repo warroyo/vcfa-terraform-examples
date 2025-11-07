@@ -59,7 +59,7 @@ resource "kubernetes_manifest" "music-store" {
     spec = {
       project = "default"
       source = {
-        repoURL = "https://github.com/NiranEC77/metal-music-store"
+        repoURL = "https://github.com/warroyo/metal-music-store"
         path = "./"
         targetRevision = var.music_store_revision
         directory = {

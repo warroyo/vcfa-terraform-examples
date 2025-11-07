@@ -62,8 +62,25 @@ resource "kubernetes_manifest" "music-store" {
         repoURL = "https://github.com/warroyo/metal-music-store"
         path = "./"
         targetRevision = var.music_store_revision
-        directory = {
-          include = "k8s-*.yaml"
+        # directory = {
+        #   include = "k8s-*.yaml"
+        # }
+        kustomize = {
+          patches = [
+            {
+              patch = <<-EOT
+                - op: replace
+                  path: /spec/hostnames/0
+                  value: "music-store.${module.supervisor_namespace.namespace}.apps.vcf.lab"
+              EOT
+              target = {
+                group   = "gateway.networking.k8s.io"
+                version = "v1"
+                kind    = "HTTPRoute"
+                name    = "http"
+              }
+            }
+          ]
         }
       }
       destination = {

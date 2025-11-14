@@ -25,3 +25,8 @@ variable "k8s_version" {
   type = string
   default = "v1.32.0+vmware.6-fips"
 }
+
+variable "worker_replicas" {
+  type = number
+  default = 1
+}

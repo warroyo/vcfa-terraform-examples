@@ -68,3 +68,8 @@ variable "music_store_revision" {
   type = string
   default = "main"
 }
+
+variable "ns_class" {
+  type = string
+  default = "small"
+}

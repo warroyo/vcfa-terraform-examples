@@ -65,7 +65,7 @@ resource "kubernetes_manifest" "kubernetes_cluster" {
             {
               "class"    = "node-pool",
               "name"     = var.name
-              "replicas" = 1
+              "replicas" = var.worker_replicas
               "variables" = {
                 "overrides" = [
                   {

@@ -12,9 +12,9 @@ resource "vcfa_supervisor_namespace" "supervisor_namespace" {
   }
 
   zones_initial_class_config_overrides {
-    cpu_limit          = "10000M"
+    cpu_limit          = var.cpu_limit
     cpu_reservation    = "0M"
-    memory_limit       = "10000Mi"
+    memory_limit       = var.mem_limit
     memory_reservation = "0Mi"
     name               = var.zone_name
   }

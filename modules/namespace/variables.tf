@@ -24,3 +24,13 @@ variable "class_name" {
   type = string
   default = "small"
 }
+
+variable "cpu_limit" {
+   type = string
+  default = "10000M"
+}
+
+variable "mem_limit" {
+   type = string
+  default = "10000Mi"
+}

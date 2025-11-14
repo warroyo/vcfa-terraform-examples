@@ -6,6 +6,9 @@ module "supervisor_namespace" {
   vpc_name = var.vpc_name
   name = var.namespace
   storage_limit = var.ns_storage_limit
+  class_name = var.ns_class
+  mem_limit = "20000Mi"
+  cpu_limit = "15000M"
 }
 
 module "argocd-instance" {
@@ -13,6 +16,9 @@ module "argocd-instance" {
   name = "argocd-1"
   namespace = module.supervisor_namespace.namespace
   password = var.argo_password
+  providers = {
+    kubernetes = kubernetes
+  }
 }
 
 module "bootstrap-ns" {

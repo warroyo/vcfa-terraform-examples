@@ -61,7 +61,7 @@ variable "argo_password" {
 
 variable "bootstrap_revision" {
   type = string
-  default = "1.0.0"
+  default = "1.0.1"
 }
 
 variable "music_store_revision" {

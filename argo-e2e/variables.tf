@@ -69,6 +69,11 @@ variable "music_store_revision" {
   default = "main"
 }
 
+variable "music_store_repo" {
+  type = string
+  default = "https://github.com/NiranEC77/metal-music-store"
+}
+
 variable "ns_class" {
   type = string
   default = "small"

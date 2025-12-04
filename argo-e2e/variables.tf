@@ -84,3 +84,9 @@ variable "dns_domain" {
   default = "apps.vcf.lab"
   description = "domain that will be used for external dns"
 }
+
+variable "bootstrap_path" {
+  type = string
+  default = "./cluster-bootstrap/source"
+  
+}

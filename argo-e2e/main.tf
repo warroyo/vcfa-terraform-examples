@@ -24,7 +24,7 @@ module "argocd-instance" {
 module "bootstrap-ns" {
   source = "../modules/sup-ns-cluster-bootstrap"
   namespace = module.supervisor_namespace.namespace
-  path = "./cluster-bootstrap/source"
+  path = var.bootstrap_path
   repo = "https://github.com/warroyo/vks-argocd-examples"
   depends_on = [ module.argocd-instance ]
   revision = var.bootstrap_revision

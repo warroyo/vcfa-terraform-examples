@@ -61,7 +61,7 @@ variable "argo_password" {
 
 variable "bootstrap_revision" {
   type = string
-  default = "1.0.1"
+  default = "2.0.0"
 }
 
 variable "music_store_revision" {
@@ -87,6 +87,6 @@ variable "dns_domain" {
 
 variable "bootstrap_path" {
   type = string
-  default = "./cluster-bootstrap/source"
+  default = "./cluster-bootstrap/basic"
   
 }

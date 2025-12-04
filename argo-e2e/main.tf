@@ -1,4 +1,3 @@
-
 module "supervisor_namespace" {
   source = "../modules/namespace"
   zone_name = var.zone_name

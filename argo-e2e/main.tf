@@ -77,7 +77,7 @@ resource "kubernetes_manifest" "music-store" {
               patch = <<-EOT
                 - op: replace
                   path: /spec/hostnames/0
-                  value: "music-store.${module.supervisor_namespace.namespace}.apps.vcf.lab"
+                  value: "music-store.${module.supervisor_namespace.namespace}.${var.dns_domain}"
               EOT
               target = {
                 group   = "gateway.networking.k8s.io"

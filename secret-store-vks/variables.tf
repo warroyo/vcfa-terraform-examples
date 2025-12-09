@@ -32,3 +32,17 @@ variable "cluster" {
   type        = string
 }
 
+variable "vm_class" {
+  type = string
+  default = "best-effort-large"
+}
+
+variable "cluster_class" {
+  type = string
+  default = "builtin-generic-v3.5.0"
+}
+
+variable "k8s_version" {
+  type = string
+  default = "v1.34.1+vmware.1"
+}

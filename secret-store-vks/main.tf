@@ -2,7 +2,9 @@ module "vks" {
   source = "../modules/vks-cluster"
   name = var.cluster
   namespace = var.namespace
-  vmClass = "best-effort-large"
+  vmClass = var.vm_class
+  cluster_class = var.cluster_class
+  k8s_version = var.k8s_version
 }
 
 locals {
@@ -112,6 +114,7 @@ locals {
                   metadata:
                     annotations:
                       vault.hashicorp.com/auth-path: auth/${var.cluster}
+                      vault.hashicorp.com/agent-inject-secret-db-creds: secret/${var.namespace}/db-cred2
       destination:
         name: ${var.cluster}
         namespace: default

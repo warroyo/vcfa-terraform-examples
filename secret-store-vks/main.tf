@@ -114,7 +114,12 @@ locals {
                   metadata:
                     annotations:
                       vault.hashicorp.com/auth-path: auth/${var.cluster}
-                      vault.hashicorp.com/agent-inject-secret-db-creds: secret/${var.namespace}/db-cred2
+                      vault.hashicorp.com/agent-inject-secret-db-creds.yaml: secret/${var.namespace}/db-cred2
+                      vault.hashicorp.com/agent-inject-template-db-creds.yaml: |
+                        {{- with secret "secret/${var.namespace}/db-cred2" -}}
+                        username: {{ .Data.data.username }}
+                        password: {{ .Data.data.password }}
+                        {{- end -}}
       destination:
         name: ${var.cluster}
         namespace: default

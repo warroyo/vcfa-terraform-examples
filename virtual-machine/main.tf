@@ -31,22 +31,29 @@ resource "vcfa_content_library" "cl" {
 }
 
 resource "null_resource" "ova_download" {
-    provisioner "local-exec" {
-    command = "curl -sS -o ${path.module}/ubuntu.ova https://cloud-images.ubuntu.com/noble/current/noble-server-cloudimg-amd64.ova"
-        interpreter = ["bash", "-c"]
-     }
+  provisioner "local-exec" {
+    command = <<EOT
+      if [ ! -f "${path.module}/ubuntu.ova" ]; then
+        echo "Downloading OVA..."
+        curl -L -sS -o "${path.module}/ubuntu.ova" https://cloud-images.ubuntu.com/noble/current/noble-server-cloudimg-amd64.ova
+      else
+        echo "File already exists. Skipping."
+      fi
+    EOT
+    interpreter = ["bash", "-c"]
+  }
 
-    triggers = {
-     always_run = "${timestamp()}"
-    }
- }
+  lifecycle {
+    ignore_changes = all
+  }
+}
 
 resource "vcfa_content_library_item" "ova" {
   name               = "ubuntu"
   description        = "simple ubuntu image"
   content_library_id = vcfa_content_library.cl.id
   file_paths         = ["${path.module}/ubuntu.ova"]
-  depends_on = [ null_resource.ova_download ]
+  depends_on = [null_resource.ova_download]
 }
 
 module "supervisor_namespace" {

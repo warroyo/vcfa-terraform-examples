@@ -20,6 +20,11 @@ variable "storage_limit" {
   default = "102400Mi"
 }
 
+variable "storage_class_name" {
+  type    = string
+  default = "vSAN Default Storage Policy"
+}
+
 variable "class_name" {
   type = string
   default = "small"

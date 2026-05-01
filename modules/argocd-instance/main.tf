@@ -18,7 +18,7 @@ resource "kubernetes_manifest" "argo-cd-instance" {
       "applicationSet" = {
         "enabled": true
       }
-      "version" = "2.14.15+vmware.1-vks.1"
+      "version" = var.argocd_version
     }
   }
   wait {

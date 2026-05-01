@@ -88,5 +88,19 @@ variable "dns_domain" {
 variable "bootstrap_path" {
   type = string
   default = "./cluster-bootstrap/basic"
-  
+}
+
+variable "storage_class_name" {
+  type    = string
+  default = "vSAN Default Storage Policy"
+}
+
+variable "argocd_version" {
+  type    = string
+  default = "3.0.19+vmware.1-vks.1"
+}
+
+variable "vks_storage_class" {
+  type    = string
+  default = "vsan-default-storage-policy"
 }

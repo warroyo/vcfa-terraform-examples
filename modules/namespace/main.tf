@@ -8,7 +8,7 @@ resource "vcfa_supervisor_namespace" "supervisor_namespace" {
 
   storage_classes_initial_class_config_overrides {
     limit = var.storage_limit
-    name  = "vSAN Default Storage Policy"
+    name  = var.storage_class_name
   }
 
   zones_initial_class_config_overrides {

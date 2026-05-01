@@ -6,6 +6,7 @@ module "supervisor_namespace" {
   name = var.namespace
   storage_limit = var.ns_storage_limit
   class_name = var.ns_class
+  storage_class_name = var.storage_class_name
   mem_limit = "20000Mi"
   cpu_limit = "15000M"
 }
@@ -15,6 +16,7 @@ module "argocd-instance" {
   name = "argocd-1"
   namespace = module.supervisor_namespace.namespace
   password = var.argo_password
+  argocd_version = var.argocd_version
   providers = {
     kubernetes = kubernetes
   }
@@ -36,6 +38,7 @@ module "vks" {
   vmClass = var.vm_class
   cluster_class = var.cluster_class
   k8s_version = var.k8s_version
+  storageClass = var.vks_storage_class
 }
 
 module "argo-attach" {

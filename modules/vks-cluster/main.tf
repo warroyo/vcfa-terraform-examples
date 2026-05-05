@@ -89,7 +89,11 @@ resource "kubernetes_manifest" "kubernetes_cluster" {
       }
     }
   }
-  computed_fields = ["spec.topology.variables"]
+  computed_fields = [
+    "metadata.labels",
+    "spec.topology.variables",
+    "spec.topology.version",
+  ]
   timeouts {
     create = "30m"
   }
@@ -101,7 +105,7 @@ resource "kubernetes_manifest" "kubernetes_cluster" {
 }
 
 
-data "kubernetes_secret" "cluster-kubeconfig" {
+data "kubernetes_secret_v1" "cluster-kubeconfig" {
     metadata {
     name = "${var.name}-kubeconfig"
     namespace = var.namespace
@@ -111,7 +115,7 @@ data "kubernetes_secret" "cluster-kubeconfig" {
 }
 
 output "kubeconfig" {
-  value = lookup(data.kubernetes_secret.cluster-kubeconfig.data, "value")
+  value = lookup(data.kubernetes_secret_v1.cluster-kubeconfig.data, "value")
   depends_on = [ kubernetes_manifest.kubernetes_cluster ]
   sensitive = true
 }

@@ -30,3 +30,13 @@ variable "worker_replicas" {
   type = number
   default = 1
 }
+
+variable "cni_name" {
+  type    = string
+  default = "antrea"
+}
+
+variable "cni_namespace" {
+  type    = string
+  default = "vmware-system-vks-public"
+}

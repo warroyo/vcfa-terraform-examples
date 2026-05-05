@@ -57,6 +57,15 @@ resource "kubernetes_manifest" "kubernetes_cluster" {
           {
             "name"  = "storageClass",
             "value" = var.storageClass
+          },
+          {
+            "name" = "bootstrapAddons",
+            "value" = {
+              "cniRef" = {
+                "name"      = var.cni_name
+                "namespace" = var.cni_namespace
+              }
+            }
           }
         ],
         "version" = var.k8s_version
@@ -80,10 +89,10 @@ resource "kubernetes_manifest" "kubernetes_cluster" {
       }
     }
   }
+  computed_fields = ["spec.topology.variables"]
   timeouts {
     create = "30m"
   }
-  computed_fields = ["spec.topology.variables"]
   wait {
     fields = {
     "status.v1beta2.conditions[0].status" = "True"

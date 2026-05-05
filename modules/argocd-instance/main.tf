@@ -2,7 +2,7 @@ locals {
   argo_password = ( 
     length(trimspace(var.password)) > 0
     ? var.password
-    : data.kubernetes_secret.admin-password.data.password
+    : data.kubernetes_secret_v1.admin-password.data.password
   )
 }
 resource "kubernetes_manifest" "argo-cd-instance" {
@@ -50,7 +50,7 @@ resource "kubernetes_secret_v1_data" "update-admin-secret" {
       depends_on = [ kubernetes_manifest.argo-cd-instance ]
 }
 
-data "kubernetes_service" "argocd" {
+data "kubernetes_service_v1" "argocd" {
   metadata {
     name = "argocd-server"
     namespace = var.namespace
@@ -58,7 +58,7 @@ data "kubernetes_service" "argocd" {
   depends_on = [ kubernetes_manifest.argo-cd-instance ]
 }
 
-data "kubernetes_secret" "admin-password" {
+data "kubernetes_secret_v1" "admin-password" {
   metadata {
     name = "argocd-initial-admin-secret"
     namespace = var.namespace

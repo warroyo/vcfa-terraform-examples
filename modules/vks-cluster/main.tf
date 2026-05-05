@@ -83,6 +83,7 @@ resource "kubernetes_manifest" "kubernetes_cluster" {
   timeouts {
     create = "30m"
   }
+  computed_fields = ["spec.topology.variables"]
   wait {
     fields = {
     "status.v1beta2.conditions[0].status" = "True"

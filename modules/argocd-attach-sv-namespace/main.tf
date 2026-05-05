@@ -1,6 +1,6 @@
 locals {
   argocd_cluster_config = {
-    "bearerToken" = kubernetes_secret.argocd-token.data.token
+    "bearerToken" = kubernetes_secret_v1.argocd-token.data.token
     "tlsClientConfig" = {
       "insecure" = true
     }
@@ -10,19 +10,19 @@ locals {
   
 }
 
-resource "kubernetes_service_account" "argo-cd-sa" {
+resource "kubernetes_service_account_v1" "argo-cd-sa" {
   metadata {
     name = var.sa_name
     namespace = local.argo_namespace
   }
 }
 
-resource "kubernetes_secret" "argocd-token" {
+resource "kubernetes_secret_v1" "argocd-token" {
   metadata {
     name = "${var.sa_name}-sa-token"
     namespace = local.argo_namespace
     annotations = {
-      "kubernetes.io/service-account.name" = kubernetes_service_account.argo-cd-sa.metadata[0].name
+      "kubernetes.io/service-account.name" = kubernetes_service_account_v1.argo-cd-sa.metadata[0].name
     }
   }
   type = "kubernetes.io/service-account-token"
@@ -47,7 +47,7 @@ resource "kubernetes_manifest" "argo-cd-role-binding" {
     "subjects" = [
       {
         "kind" = "ServiceAccount"
-        "name" = kubernetes_service_account.argo-cd-sa.metadata[0].name
+        "name" = kubernetes_service_account_v1.argo-cd-sa.metadata[0].name
         "namespace" =  local.argo_namespace
       }
     ]
@@ -55,7 +55,7 @@ resource "kubernetes_manifest" "argo-cd-role-binding" {
 }
 
 
-resource "kubernetes_secret" "argocd-namespace-register" {
+resource "kubernetes_secret_v1" "argocd-namespace-register" {
   metadata {
     name = "${var.namespace}-cluster-secret"
     namespace = var.argocd_namespace

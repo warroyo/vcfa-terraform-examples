@@ -15,7 +15,7 @@ locals {
 
 
 
-resource "kubernetes_secret" "argocd-cluster-register" {
+resource "kubernetes_secret_v1" "argocd-cluster-register" {
   metadata {
     name = "${var.cluster_name}-cluster-secret"
     namespace = var.namespace

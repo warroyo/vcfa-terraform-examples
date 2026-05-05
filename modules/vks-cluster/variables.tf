@@ -18,12 +18,12 @@ variable "storageClass" {
 
 variable "cluster_class" {
   type = string
-  default = "builtin-generic-v3.4.0"
+  default = "builtin-generic-v3.6.0"
 }
 
 variable "k8s_version" {
   type = string
-  default = "v1.32.0+vmware.6-fips"
+  default = "v1.35.2+vmware.1"
 }
 
 variable "worker_replicas" {

@@ -18,7 +18,7 @@ variable "storageClass" {
 
 variable "cluster_class" {
   type = string
-  default = "builtin-generic-v3.6.0"
+  default = "builtin-generic-v3.7.0"
 }
 
 variable "k8s_version" {

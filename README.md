@@ -13,6 +13,8 @@ This repo contians a collection of examples how to to interact with VCF-A using 
 * [ArgoCD e2e](./argo-e2e/) -  end to end of creating a namespace, cluster, argocd instance, and deploying an app
 * [ArgoCD cluster](./argocd-cluster/) - deloys a cluster and registers it with ArgoCD
 * [Secret Store Integration](./secret-store-vks/) - deloys a cluster, registers it to argocd, creates a secret, registers the cluster with secrets store service and installs the vault injetcor in the cluster
+* [Cluster Policy](./cluster-policy/) - creates a VKS cluster management policy (ClusterPolicy) using the 9.1 cluster policy APIs, at the org, project, or cluster scope
+* [Custom Cluster Policy](./cluster-policy-custom/) - defines a custom policy template (OPA Gatekeeper) and applies a custom ClusterPolicy from it to a project
 
 
 ## FAQ

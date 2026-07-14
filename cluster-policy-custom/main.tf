@@ -1,120 +1,38 @@
-locals {
-  # OPA Gatekeeper requires the ConstraintTemplate name to be the lowercase of
-  # its CRD kind, so keep these two in sync if you rename the template. The
-  # ClusterPolicyTemplate name must also match the embedded object name.
-  template_name   = "requireteamlabels"
-  constraint_kind = "RequireTeamLabels"
+module "require_resource_limits" {
+  source = "../modules/cluster-policy-custom"
 
-  # creating a ClusterPolicyTemplate auto generates a ClusterPolicySchema of
-  # type custom-policy named "<template-name>:custom-policy". the ClusterPolicy
-  # below references that generated schema.
-  schema_name = "${local.template_name}:custom-policy"
-}
+  # the ConstraintTemplate name must be the lowercase of constraint_kind
+  template_name   = "requireresourcelimits"
+  constraint_kind = "RequireResourceLimits"
 
-# 1. the policy template. this is an org scoped resource that wraps an OPA
-# Gatekeeper ConstraintTemplate containing the Rego enforcement logic. only org
-# admins can create templates. this require-labels logic mirrors the built-in
-# vksm-require-labels template but is defined here to demonstrate managing a
-# custom template end to end.
-resource "kubernetes_manifest" "policy_template" {
-  manifest = {
-    "apiVersion" = "policy.management.kubernetes.vmware.com/v1alpha1"
-    "kind"       = "ClusterPolicyTemplate"
-    "metadata" = {
-      "name"      = local.template_name
-      "namespace" = "@org"
-    }
-    "spec" = {
-      "templateType" = "OPAGatekeeper"
-      "objectKind"   = "ConstraintTemplate"
-      # the embedded Gatekeeper ConstraintTemplate. its metadata.name must match
-      # the ClusterPolicyTemplate metadata.name above.
-      "object" = {
-        "apiVersion" = "templates.gatekeeper.sh/v1"
-        "kind"       = "ConstraintTemplate"
-        "metadata" = {
-          "name" = local.template_name
-        }
-        "spec" = {
-          "crd" = {
-            "spec" = {
-              "names" = {
-                "kind" = local.constraint_kind
-              }
-              # defines the parameters callers can pass in the ClusterPolicy input
-              "validation" = {
-                "openAPIV3Schema" = {
-                  "type" = "object"
-                  "properties" = {
-                    "labels" = {
-                      "type"        = "array"
-                      "description" = "the label keys that must be present on the resource"
-                      "items" = {
-                        "type" = "string"
-                      }
-                    }
-                  }
-                }
-              }
-            }
-          }
-          "targets" = [
-            {
-              "target" = "admission.k8s.gatekeeper.sh"
-              "rego"   = <<-REGO
-                package ${local.template_name}
-
-                violation[{"msg": msg, "details": {"missing_labels": missing}}] {
-                  provided := {label | input.review.object.metadata.labels[label]}
-                  required := {label | label := input.parameters.labels[_]}
-                  missing := required - provided
-                  count(missing) > 0
-                  msg := sprintf("missing required labels: %v", [missing])
-                }
-              REGO
-            }
-          ]
-        }
+  parameters_schema = {
+    limits = {
+      type        = "array"
+      description = "the resource limit keys that must be set on every container, e.g. cpu, memory"
+      items = {
+        type = "string"
       }
     }
   }
-}
 
-# 2. the custom policy, applied at the project level. it references the schema
-# generated from the template above and passes the parameters, target resources
-# and enforcement action as input. the input shape is defined by the generated
-# ClusterPolicySchema, inspect it before applying with:
-#   kubectl get clusterpolicyschema requireteamlabels:custom-policy -n @org -o yaml
-resource "kubernetes_manifest" "custom_policy" {
-  manifest = {
-    "apiVersion" = "policy.management.kubernetes.vmware.com/v1alpha1"
-    "kind"       = "ClusterPolicy"
-    "metadata" = {
-      "name"      = var.policy_name
-      "namespace" = var.project_name
+  rego_rules = <<-REGO
+    violation[{"msg": msg}] {
+      container := input.review.object.spec.containers[_]
+      limit := input.parameters.limits[_]
+      not container.resources.limits[limit]
+      msg := sprintf("container %q is missing required resource limit %q", [container.name, limit])
     }
-    "spec" = merge(
-      {
-        "clusterPolicySchemaRef" = {
-          "name"      = local.schema_name
-          "namespace" = "@org"
-        }
-        "input" = {
-          "parameters" = {
-            "labels" = var.required_labels
-          }
-          "match" = {
-            "kinds" = var.target_resources
-          }
-          "enforcementAction" = var.enforcement_action
-        }
-      },
-      var.cluster_namespace_selector != null ? { "clusterNamespaceSelector" = var.cluster_namespace_selector } : {}
-    )
-  }
+  REGO
 
-  # the schema is generated asynchronously after the template is created, so make
-  # sure the template exists first. if the policy apply fails because the schema
-  # is not yet available, re-run terraform apply.
-  depends_on = [kubernetes_manifest.policy_template]
+  policy_scope = "project"
+  project_name = var.project_name
+  policy_name  = var.policy_name
+
+  policy_input = {
+    parameters = {
+      limits = var.required_limits
+    }
+    targetKubernetesResources = var.target_resources
+    enforcementAction         = var.enforcement_action
+  }
 }
